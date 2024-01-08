@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+  iopostgres:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    volumes:
+      - iopostgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=dbpass
+      - POSTGRES_USER=admin
+      - POSTGRES_DB=io
+
+volumes:
+  iopostgres_data:
