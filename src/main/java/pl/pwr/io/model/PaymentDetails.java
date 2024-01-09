@@ -29,11 +29,30 @@ public class PaymentDetails implements Serializable {
 	@org.hibernate.annotations.GenericGenerator(name="MODEL_PAYMENTDETAILS_ID_GENERATOR", strategy="native")	
 	private int ID;
 	
-	@Column(name="DeliveryId", nullable=false)	
-	private long deliveryId;
-	
-	@Column(name="UserId", nullable=true)	
+	@Column(name="UserId", nullable=true)
 	private Long userId;
+
+	public String getPaymentMethod() {
+		return paymentMethod;
+	}
+
+	public void setPaymentMethod(String paymentMethod) {
+		this.paymentMethod = paymentMethod;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	@Column(name="PaymentMethod", nullable=true, length=255)
+	private String paymentMethod;
+
+	@Column(name="Value", nullable=true, length=255)
+	private String value;
 	
 	@Column(name="PaymentAddress", nullable=true, length=10)	
 	private Integer paymentAddress;
@@ -98,14 +117,6 @@ public class PaymentDetails implements Serializable {
 	
 	public int getCVC() {
 		return CVC;
-	}
-	
-	public void setDeliveryId(long value) {
-		this.deliveryId = value;
-	}
-	
-	public long getDeliveryId() {
-		return deliveryId;
 	}
 	
 	public void setDelivery(Delivery value) {

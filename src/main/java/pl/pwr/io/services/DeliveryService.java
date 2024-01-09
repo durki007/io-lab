@@ -35,8 +35,9 @@ public class DeliveryService {
     /**
      * @param userId
      * @param request
+     * @param paymentDetails
      */
-    public Delivery createDelivery(Long userId, DeliveryRequest request) throws NoSuchElementException, InvalidAddressException, DeliveryImpossibleException {
+    public Delivery createDelivery(Long userId, DeliveryRequest request, PaymentDetailsDTO paymentDetails) throws NoSuchElementException, InvalidAddressException, DeliveryImpossibleException {
         Delivery delivery = new Delivery();
         delivery.setSender(userService.getUser(userId)); // Throws exception if user not found
         delivery.setReceiver(userService.getUser(request.receiverUserId())); // Throws exception if user not found
@@ -49,6 +50,9 @@ public class DeliveryService {
         }
         // Initialize payment status
         delivery.setPaymentStatus(PaymentStatus.NONE);
+        delivery.setPaymentDetails(paymentService.createPaymentDetails(paymentDetails));
+        // Create first payment request
+        paymentService.requestPayment(delivery.getSender(), delivery.getPaymentDetails());
         // Initialize delivery status
         delivery.setStatus(DeliveryStatus.PENDING);
         // Initialize package details
