@@ -2,7 +2,7 @@ package pl.pwr.io.model;
 
 public enum PaymentStatus {
     NONE,
-    REQUETED,
+    REQUESTED,
     PAID,
     REJECTED
 }

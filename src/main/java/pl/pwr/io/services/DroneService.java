@@ -20,7 +20,7 @@ public class DroneService {
      * @param delivery
      */
     public int getDroneForDelivery(Delivery delivery) {
-        throw new UnsupportedOperationException();
+        return 1;
     }
 
 }

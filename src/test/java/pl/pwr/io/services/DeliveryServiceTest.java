@@ -1,9 +1,7 @@
 package pl.pwr.io.services;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -22,11 +20,11 @@ class DeliveryServiceTest {
         assertTrue(true);
     }
 
-    @Test
-        // Test throwing unsupported operation exception
-    void throwTest() {
-        assertThrows(UnsupportedOperationException.class, () -> {
-            deliveryServiceUnderTest.createDelivery(null);
-        });
-    }
+//    @Test
+//        // Test throwing unsupported operation exception
+//    void throwTest() {
+//        assertThrows(UnsupportedOperationException.class, () -> {
+//            deliveryServiceUnderTest.createDelivery(1, null);
+//        });
+//    }
 }

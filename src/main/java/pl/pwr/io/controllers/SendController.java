@@ -1,17 +1,38 @@
 package pl.pwr.io.controllers;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+import pl.pwr.io.err.DeliveryImpossibleException;
+import pl.pwr.io.err.InvalidAddressException;
 import pl.pwr.io.model.*;
 import pl.pwr.io.dto.DeliveryRequest;
+import pl.pwr.io.services.DeliveryService;
 
+@RestController
 public class SendController {
+
+	@Autowired
+	private DeliveryService deliveryService;
 
 	/**
 	 * 
 	 * @param userId
 	 * @param request
 	 */
-	public Delivery createSendRequest(Long userId, DeliveryRequest request) {
-		throw new UnsupportedOperationException();
-	}
+	@PutMapping("/delivery/request")
+	public Delivery createSendRequest(@RequestParam Long userId, @RequestBody DeliveryRequest request) {
+        try {
+            return deliveryService.createDelivery(userId, request);
+        } catch (InvalidAddressException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        } catch (DeliveryImpossibleException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, e.getMessage(), e);
+        }
+    }
 
 	/**
 	 * 

@@ -21,6 +21,8 @@ package pl.pwr.io.model;
 import java.io.Serializable;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 @Entity
 @org.hibernate.annotations.Proxy(lazy = false)
@@ -65,6 +67,14 @@ public class Delivery implements Serializable {
     @Enumerated(EnumType.ORDINAL)
     private DeliveryStatus status;
 
+    public PaymentStatus getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
     @Column(name = "PaymentStatus", nullable = true, length = 10)
     @Enumerated(EnumType.ORDINAL)
     private PaymentStatus paymentStatus;
@@ -73,6 +83,7 @@ public class Delivery implements Serializable {
     private String description;
 
     @Column(name = "CreatedAt", nullable = true)
+    @CreationTimestamp
     private java.sql.Timestamp createdAt;
 
     @Column(name = "ReceivedByDroneAt", nullable = true)
@@ -81,7 +92,7 @@ public class Delivery implements Serializable {
     @Column(name = "ReceivedByUserAt", nullable = true)
     private java.sql.Timestamp receivedByUserAt;
 
-    @Column(name = "HasDeliveryAddressBeenChanged", nullable = false)
+    @Column(name = "HasDeliveryAddressBeenChanged", nullable = true)
     private boolean hasDeliveryAddressBeenChanged;
 
     @Column(name = "DeliveryAddressChangedAt", nullable = true)
