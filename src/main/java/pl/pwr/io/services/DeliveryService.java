@@ -76,7 +76,7 @@ public class DeliveryService {
     }
 
     public List<Delivery> getCurrentDeliveries(Long userId) {
-        return deliveryRepository.findBySender_UserId(userId);
+        return deliveryRepository.findAllBySender_Id(userId);
     }
 
     public Delivery changeDeliveryAddress(Long deliveryId, Address newAddress) {

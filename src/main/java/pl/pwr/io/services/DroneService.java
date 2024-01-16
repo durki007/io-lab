@@ -23,7 +23,7 @@ public class DroneService {
             return false;
         }
         // Same address
-        if (startAddress.equals(destinationAddress)) {
+        if (AddressUtils.addressEquals(startAddress, destinationAddress)) {
             return false;
         }
         // Different city
