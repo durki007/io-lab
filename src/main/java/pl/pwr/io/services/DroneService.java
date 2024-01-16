@@ -23,4 +23,7 @@ public class DroneService {
         return 1;
     }
 
+    public boolean hasPackage(long droneId) {
+        throw new UnsupportedOperationException();
+    }
 }

@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.pwr.io.dao.DeliveryRepository;
 import pl.pwr.io.err.DeliveryImpossibleException;
+import pl.pwr.io.err.InsufficientPermissionException;
 import pl.pwr.io.err.InvalidAddressException;
+import pl.pwr.io.err.PackageReceiveException;
 import pl.pwr.io.model.*;
 import pl.pwr.io.dto.*;
 
@@ -87,6 +89,26 @@ public class DeliveryService {
 
     public void updateDeliveryStatus(Long deliveryId, DeliveryStatus newStatus) {
         throw new UnsupportedOperationException();
+    }
+
+    // Dostarczenie paczki do odbiorcy
+    public Delivery acceptDelivery(Long deliveryId, Long userId) throws InsufficientPermissionException, PackageReceiveException {
+        Delivery delivery;
+        try {
+            delivery = deliveryRepository.findById(deliveryId).orElseThrow();
+        } catch (NoSuchElementException e) {
+            throw new InsufficientPermissionException();
+        }
+        // Check if user is receiver
+        if (!delivery.getReceiver().getId().equals(userId)) {
+            throw new InsufficientPermissionException();
+        }
+        // Check if package has been removed from drone
+        if (droneService.hasPackage(delivery.getDroneId())) {
+            throw new PackageReceiveException();
+        }
+        delivery.setStatus(DeliveryStatus.ACCEPTED);
+        return deliveryRepository.save(delivery);
     }
 
     // Funkcja wywoływana przez drona przy przejęciu paczki
