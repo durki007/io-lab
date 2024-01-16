@@ -22,6 +22,12 @@ public class PaymentService {
         throw new UnsupportedOperationException();
     }
 
+    //
+    public void rejectPaymentForDelivery(long deliveryId) {
+        // Funkcja wywoływana przez dostawce usługi płatności w przypadku odrzucenia płatności
+        throw new UnsupportedOperationException();
+    }
+
     /**
      * @param user
      */

@@ -64,6 +64,16 @@ public class DeliveryService {
         return deliveryRepository.save(delivery);
     }
 
+    public Delivery receiveDelivery(Long userId) {
+        throw new UnsupportedOperationException();
+    }
+
+    public Delivery changeDeliveryAddress(Long deliveryId, AddressDTO newAddress) throws NoSuchElementException, InvalidAddressException {
+    	Delivery delivery = deliveryRepository.findById(deliveryId).orElseThrow();
+    	delivery.setDestinationAddress(addressService.getOrCreateAddress(newAddress));
+    	return deliveryRepository.save(delivery);
+    }
+
     /**
      * @param deliveryId
      */
@@ -100,6 +110,18 @@ public class DeliveryService {
      */
     public void updateDeliveryStatus(Long deliveryId, DeliveryStatus newStatus) {
         throw new UnsupportedOperationException();
+    }
+
+    // Funkcja wywoływana przez drona przy przejęciu paczki
+    public void takeDelivery(Delivery delivery, long droneId) {
+    	delivery.setStatus(DeliveryStatus.IN_PROGRESS);
+    	deliveryRepository.save(delivery);
+    }
+
+    // Funkcja wywoływana przez drona przy błędzie podczas dostarczania paczki
+    public void abortDelivery(Delivery delivery) {
+        delivery.setStatus(DeliveryStatus.ABORTED);
+        deliveryRepository.save(delivery);
     }
 
 }
