@@ -32,11 +32,6 @@ public class DeliveryService {
         this.deliveryRepository = deliveryRepository;
     }
 
-    /**
-     * @param userId
-     * @param request
-     * @param paymentDetails
-     */
     public Delivery createDelivery(Long userId, DeliveryRequest request, PaymentDetailsDTO paymentDetails) throws NoSuchElementException, InvalidAddressException, DeliveryImpossibleException {
         Delivery delivery = new Delivery();
         delivery.setSender(userService.getUser(userId)); // Throws exception if user not found
@@ -69,53 +64,35 @@ public class DeliveryService {
     }
 
     public Delivery changeDeliveryAddress(Long deliveryId, AddressDTO newAddress) throws NoSuchElementException, InvalidAddressException {
-    	Delivery delivery = deliveryRepository.findById(deliveryId).orElseThrow();
-    	delivery.setDestinationAddress(addressService.getOrCreateAddress(newAddress));
-    	return deliveryRepository.save(delivery);
+        Delivery delivery = deliveryRepository.findById(deliveryId).orElseThrow();
+        delivery.setDestinationAddress(addressService.getOrCreateAddress(newAddress));
+        return deliveryRepository.save(delivery);
     }
 
-    /**
-     * @param deliveryId
-     */
     public Delivery getDeliveryStatus(Long deliveryId) {
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * @param userId
-     */
     public List<Delivery> getCurrentDeliveries(Long userId) {
-        throw new UnsupportedOperationException();
+        return deliveryRepository.findBySender_UserId(userId);
     }
 
-    /**
-     * @param deliveryId
-     * @param newAddress
-     */
     public Delivery changeDeliveryAddress(Long deliveryId, Address newAddress) {
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * @param deliveryId
-     * @param newLocation
-     */
     public void updateDeliveryLocation(Long deliveryId, Location newLocation) {
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * @param deliveryId
-     * @param newStatus
-     */
     public void updateDeliveryStatus(Long deliveryId, DeliveryStatus newStatus) {
         throw new UnsupportedOperationException();
     }
 
     // Funkcja wywoływana przez drona przy przejęciu paczki
     public void takeDelivery(Delivery delivery, long droneId) {
-    	delivery.setStatus(DeliveryStatus.IN_PROGRESS);
-    	deliveryRepository.save(delivery);
+        delivery.setStatus(DeliveryStatus.IN_PROGRESS);
+        deliveryRepository.save(delivery);
     }
 
     // Funkcja wywoływana przez drona przy błędzie podczas dostarczania paczki
