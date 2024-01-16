@@ -64,7 +64,7 @@ public class DeliveryService {
         return deliveryRepository.save(delivery);
     }
 
-    public Delivery receiveDelivery(Long userId) {
+    public Delivery receiveDelivery(Long userId, Long deliveryId) {
         throw new UnsupportedOperationException();
     }
 
