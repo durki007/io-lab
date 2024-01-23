@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+import pl.pwr.io.dto.DeliveryDTO;
+import pl.pwr.io.dto.DeliveryDTOMapper;
 import pl.pwr.io.err.InsufficientPermissionException;
 import pl.pwr.io.err.PackageReceiveException;
 import pl.pwr.io.model.*;
@@ -19,6 +21,8 @@ public class ReceiveController {
 
     @Autowired
     private DeliveryService deliveryService;
+
+    private final DeliveryDTOMapper deliveryDTOMapper = new DeliveryDTOMapper();
 
     public List<Delivery> getCurrentDeliveries(Long userId) {
         throw new UnsupportedOperationException();
@@ -33,9 +37,9 @@ public class ReceiveController {
     }
 
     @GetMapping("/delivery/accept")
-    public Delivery acceptDelivery(@RequestParam Long deliveryId, @RequestHeader Long userId) {
+    public DeliveryDTO acceptDelivery(@RequestParam Long deliveryId, @RequestHeader Long userId) {
         try {
-            return deliveryService.acceptDelivery(deliveryId, userId);
+            return deliveryDTOMapper.apply(deliveryService.acceptDelivery(deliveryId, userId));
         } catch (InsufficientPermissionException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage(), e);
         } catch (PackageReceiveException e) {
