@@ -29,9 +29,9 @@ public class SendController {
      * @param request
      */
     @PutMapping("/delivery/request")
-    public DeliveryDTO createSendRequest(@RequestParam Long userId, @RequestBody DeliveryRequest request, @RequestBody PaymentDetailsDTO paymentDetails) {
+    public DeliveryDTO createSendRequest(@RequestParam Long userId, @RequestBody DeliveryRequest request) {
         try {
-            return deliveryDTOMapper.apply(deliveryService.createDelivery(userId, request, paymentDetails));
+            return deliveryDTOMapper.apply(deliveryService.createDelivery(userId, request, request.paymentDetails()));
         } catch (InvalidAddressException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         } catch (DeliveryImpossibleException e) {

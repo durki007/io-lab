@@ -8,6 +8,8 @@ public record DeliveryRequest
                 Long senderUserId,
                 Long receiverUserId,
                 AddressDTO senderAddress,
-                AddressDTO receiverAddress
+                AddressDTO receiverAddress,
+
+                PaymentDetailsDTO paymentDetails
         ) {
 }
