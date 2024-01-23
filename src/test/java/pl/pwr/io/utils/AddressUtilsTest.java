@@ -8,8 +8,8 @@ import pl.pwr.io.model.Delivery;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootTest
-public class AddressUtilsTest {
+//@SpringBootTest
+class AddressUtilsTest {
     @Test
     void validAddress() {
         var a = new Address();
