@@ -22,7 +22,6 @@ import pl.pwr.io.services.AddressService;
 import pl.pwr.io.services.PaymentService;
 import pl.pwr.io.services.UserService;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -55,6 +54,7 @@ class SendControllerTest {
     private Address addressB = new Address();
     private AddressDTO addressDTOA;
     private AddressDTO addressDTOB;
+    private PaymentDetailsDTO paymentDetailsDTO;
 
     void mockUserService() {
         when(userService.getUser(1L)).thenReturn(userA);
@@ -83,7 +83,7 @@ class SendControllerTest {
         userB.setEmail("b@b");
     }
 
-    void setupAddress() {
+    void setupAddressCorrect() {
         AddressDTOMapper mapper = new AddressDTOMapper();
         addressA.setCountry("Poland");
         addressA.setCity("Wrocław");
@@ -103,6 +103,26 @@ class SendControllerTest {
         addressDTOB = mapper.apply(addressB);
     }
 
+    void setupAddressForImpossibleDelivery() {
+        AddressDTOMapper mapper = new AddressDTOMapper();
+        addressA.setCountry("Poland");
+        addressA.setCity("Wrocław");
+        addressA.setPostalCode("50-001");
+        addressA.setStreet("ul. Główna");
+        addressA.setHouseNumber(1);
+        addressA.setFlatNumber(1);
+
+        addressB.setCountry("Germany");
+        addressB.setCity("Wrocław");
+        addressB.setPostalCode("50-021");
+        addressB.setStreet("ul. Grunwaldzka");
+        addressB.setHouseNumber(1);
+        addressB.setFlatNumber(1);
+
+        addressDTOA = mapper.apply(addressA);
+        addressDTOB = mapper.apply(addressB);
+    }
+
     void setupDelivery() {
         delivery.setSender(userA);
         delivery.setReceiver(userB);
@@ -110,8 +130,17 @@ class SendControllerTest {
         delivery.setDestinationAddress(addressB);
     }
 
+    void setupPaymentDetails() {
+        paymentDetailsDTO = new PaymentDetailsDTO(
+                "1234567890123456",
+                "123",
+                "01/01",
+                666
+        );
+    }
+
     void setupVariables() {
-        setupAddress();
+        setupPaymentDetails();
         setupUsers();
         setupDelivery();
     }
@@ -130,6 +159,7 @@ class SendControllerTest {
 
     @Test
     void createSendRequest() throws Exception {
+        setupAddressCorrect();
         mock();
 
         var RequestBody = new DeliveryRequest(
@@ -137,12 +167,7 @@ class SendControllerTest {
                 2L,
                 addressDTOA,
                 addressDTOB,
-                new PaymentDetailsDTO(
-                        "1234567890123456",
-                        "123",
-                        "01/01",
-                        666
-                )
+                paymentDetailsDTO
         );
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -153,5 +178,28 @@ class SendControllerTest {
                 )
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void createSendRequestImpossible() throws Exception {
+        setupAddressForImpossibleDelivery();
+        mock();
+
+        var RequestBody = new DeliveryRequest(
+                1L,
+                2L,
+                addressDTOA,
+                addressDTOB,
+                paymentDetailsDTO
+        );
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        mockMvc.perform(put("/delivery/request")
+                        .param("userId", "1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(RequestBody))
+                )
+                .andDo(print())
+                .andExpect(status().isNotAcceptable());
     }
 }
