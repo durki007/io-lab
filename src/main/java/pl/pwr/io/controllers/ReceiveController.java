@@ -37,7 +37,7 @@ public class ReceiveController {
     }
 
     @GetMapping("/delivery/accept")
-    public DeliveryDTO acceptDelivery(@RequestParam Long deliveryId, @RequestHeader Long userId) {
+    public DeliveryDTO acceptDelivery(@RequestParam Long deliveryId, @RequestParam Long userId) {
         try {
             return deliveryDTOMapper.apply(deliveryService.acceptDelivery(deliveryId, userId));
         } catch (InsufficientPermissionException e) {
