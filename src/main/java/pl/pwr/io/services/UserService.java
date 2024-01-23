@@ -11,9 +11,6 @@ public class UserService {
     public UserService() {
     }
 
-    /**
-     * @param userId
-     */
     public User getUser(Long userId) throws NoSuchElementException {
         throw new UnsupportedOperationException();
     }
