@@ -52,7 +52,7 @@ public class User implements Serializable {
 	@org.hibernate.annotations.LazyCollection(org.hibernate.annotations.LazyCollectionOption.TRUE)	
 	private java.util.Set deliveriesReceived = new java.util.HashSet();
 	
-	private void setId(long value) {
+	public void setId(long value) {
 		setId(Long.valueOf(value));
 	}
 	

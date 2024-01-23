@@ -7,7 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-import pl.pwr.io.dto.PaymentDetailsDTO;
+import pl.pwr.io.dto.DeliveryDTO;
+import pl.pwr.io.dto.DeliveryDTOMapper;
 import pl.pwr.io.err.DeliveryImpossibleException;
 import pl.pwr.io.err.InvalidAddressException;
 import pl.pwr.io.model.*;
@@ -20,32 +21,25 @@ public class SendController {
     @Autowired
     private DeliveryService deliveryService;
 
-    /**
-     * @param userId
-     * @param request
-     */
+    private final DeliveryDTOMapper deliveryDTOMapper = new DeliveryDTOMapper();
+
     @PutMapping("/delivery/request")
-    public Delivery createSendRequest(@RequestParam Long userId, @RequestBody DeliveryRequest request, @RequestBody PaymentDetailsDTO paymentDetails) {
+    public DeliveryDTO createSendRequest(@RequestParam Long userId, @RequestBody DeliveryRequest request) {
         try {
-            return deliveryService.createDelivery(userId, request, paymentDetails);
+            return deliveryDTOMapper.apply(deliveryService.createDelivery(userId, request, request.paymentDetails()));
         } catch (InvalidAddressException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         } catch (DeliveryImpossibleException e) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, e.getMessage(), e);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
         }
     }
 
-    /**
-     * @param deliveryId
-     */
     public Delivery checkDeliveryStatus(Long deliveryId) {
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * @param deliveryId
-     * @param newAddress
-     */
     public Delivery changeDeliveryAddress(Long deliveryId, Address newAddress) {
         throw new UnsupportedOperationException();
     }

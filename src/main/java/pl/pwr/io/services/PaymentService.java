@@ -10,10 +10,6 @@ public class PaymentService {
     public PaymentService() {
     }
 
-    /**
-     * @param user
-     * @param value
-     */
     public void requestPayment(User user, PaymentDetails paymentDetails) {
         throw new UnsupportedOperationException();
     }
