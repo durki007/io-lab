@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import pl.pwr.io.dto.DeliveryDTO;
 import pl.pwr.io.dto.DeliveryDTOMapper;
-import pl.pwr.io.dto.PaymentDetailsDTO;
 import pl.pwr.io.err.DeliveryImpossibleException;
 import pl.pwr.io.err.InvalidAddressException;
 import pl.pwr.io.model.*;
@@ -24,10 +23,6 @@ public class SendController {
 
     private final DeliveryDTOMapper deliveryDTOMapper = new DeliveryDTOMapper();
 
-    /**
-     * @param userId
-     * @param request
-     */
     @PutMapping("/delivery/request")
     public DeliveryDTO createSendRequest(@RequestParam Long userId, @RequestBody DeliveryRequest request) {
         try {
@@ -41,17 +36,10 @@ public class SendController {
         }
     }
 
-    /**
-     * @param deliveryId
-     */
     public Delivery checkDeliveryStatus(Long deliveryId) {
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * @param deliveryId
-     * @param newAddress
-     */
     public Delivery changeDeliveryAddress(Long deliveryId, Address newAddress) {
         throw new UnsupportedOperationException();
     }
