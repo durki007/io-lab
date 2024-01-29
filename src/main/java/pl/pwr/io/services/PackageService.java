@@ -14,4 +14,17 @@ public class PackageService {
         packageDetails.setDim_z(1.0);
         return packageDetails;
     }
+
+    public PackageDetails evaluatePackage(double x, double y, double z) throws IllegalArgumentException {
+        if (x <= 0 || y <= 0 || z <= 0) {
+            throw new IllegalArgumentException("Dimensions must be positive");
+        }
+        PackageDetails packageDetails = new PackageDetails();
+        packageDetails.setVolume(x * y * z);
+        packageDetails.setDim_x(x);
+        packageDetails.setDim_y(y);
+        packageDetails.setDim_z(z);
+        packageDetails.setWeigth(packageDetails.getVolume() / 1000);
+        return packageDetails;
+    }
 }
