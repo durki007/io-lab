@@ -19,6 +19,10 @@ public class PackageService {
         if (x <= 0 || y <= 0 || z <= 0) {
             throw new IllegalArgumentException("Dimensions must be positive");
         }
+        if (x >= 1000 || y >= 1000 || z >= 1000) {
+            throw new IllegalArgumentException("Dimensions are too large");
+        }
+
         PackageDetails packageDetails = new PackageDetails();
         packageDetails.setVolume(x * y * z);
         packageDetails.setDim_x(x);
